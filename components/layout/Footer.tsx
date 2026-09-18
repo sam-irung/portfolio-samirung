@@ -16,6 +16,7 @@ const footerLinks = [
     title: "Parcours",
     links: [
       { label: "Expérience", href: "/experience" },
+      { label: "Labs", href: "/labs" },
       { label: "Certifications", href: "/certifications" },
       { label: "Publications", href: "/publications" },
       { label: "Documents", href: "/documents" },
