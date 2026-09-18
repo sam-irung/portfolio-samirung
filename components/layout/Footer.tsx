@@ -8,24 +8,32 @@ const footerLinks = [
     links: [
       { label: "Accueil", href: "/" },
       { label: "À propos", href: "/a-propos" },
+      { label: "Compétences", href: "/competences" },
       { label: "Projets", href: "/projets" },
-      { label: "Contact", href: "/contact" },
     ],
   },
   {
-    title: "Ressources",
+    title: "Parcours",
     links: [
-      { label: "Labs", href: "/labs" },
-      { label: "Blog", href: "/blog" },
+      { label: "Expérience", href: "/experience" },
+      { label: "Certifications", href: "/certifications" },
       { label: "Publications", href: "/publications" },
       { label: "Documents", href: "/documents" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { label: "Me contacter", href: "/contact" },
+      { label: "GitHub", href: "https://github.com/sam-irung" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/sam-irung-44a113334/" },
     ],
   },
 ];
 
 const socials = [
   { label: "GitHub", href: "https://github.com/sam-irung" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/samirung-4a113334" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sam-irung-44a113334/" },
   { label: "Email", href: "mailto:samirung65@gmail.com" },
 ];
 
@@ -33,8 +41,8 @@ export default function Footer() {
   return (
     <footer className="mt-auto border-t border-neutral-200 bg-neutral-50">
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="grid gap-10 md:grid-cols-3">
-          {/* Bloc identité */}
+        <div className="grid gap-10 md:grid-cols-4">
+          {/* Identité */}
           <div>
             <Link
               href="/"

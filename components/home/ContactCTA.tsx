@@ -48,7 +48,7 @@ export default function ContactCTA() {
                 </Link>
 
                 <Link
-                  href="https://linkedin.com/in/samirung-4a113334"
+                  href="https://www.linkedin.com/in/sam-irung-44a113334/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 text-sm font-medium text-white transition-colors hover:bg-white/10"

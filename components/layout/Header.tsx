@@ -5,12 +5,12 @@ import { useState } from "react";
 
 const navItems = [
   { label: "Accueil", href: "/" },
-  { label: "À propos", href: "#a-propos" },
-  { label: "Services", href: "#services" },
-  { label: "Projets", href: "#projets" },
-  { label: "Labs", href: "#labs" },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+  { label: "À propos", href: "/a-propos" },
+  { label: "Compétences", href: "/competences" },
+  { label: "Projets", href: "/projets" },
+  { label: "Parcours", href: "/experience" },
+  { label: "Documents", href: "/documents" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Header() {
@@ -28,26 +28,21 @@ export default function Header() {
         </Link>
 
         {/* Navigation desktop */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item, i) => (
+        <nav className="hidden md:flex items-center gap-7">
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`relative text-sm font-medium transition-colors hover:text-primary-600 ${
-                i === 0 ? "text-primary-600" : "text-neutral-600"
-              }`}
+              className="text-sm font-medium text-neutral-600 transition-colors hover:text-primary-600"
             >
               {item.label}
-              {i === 0 && (
-                <span className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary-600" />
-              )}
             </Link>
           ))}
         </nav>
 
         {/* CTA desktop */}
         <Link
-          href="#contact"
+          href="/contact"
           className="hidden md:inline-flex h-10 items-center gap-2 rounded-full bg-primary-600 px-5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
         >
           <svg

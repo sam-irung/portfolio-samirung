@@ -26,11 +26,11 @@ export default function FeaturedProjects() {
               </p>
             </div>
             <Link
-              href="#projets"
-              className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
+            href="/projets"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
             >
-              Voir tous les projets
-              <span aria-hidden>→</span>
+            Voir tous les projets
+            <span aria-hidden>→</span>
             </Link>
           </div>
         </Reveal>
@@ -62,13 +62,13 @@ export default function FeaturedProjects() {
                     ))}
                   </div>
 
-                  <Link
-                    href="#projets"
+                    <Link
+                    href="/projets"
                     className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors group-hover:text-primary-700"
-                  >
+                    >
                     Voir le projet
                     <span aria-hidden>→</span>
-                  </Link>
+                    </Link>
                 </div>
               </article>
             </Reveal>
