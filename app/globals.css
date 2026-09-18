@@ -1,26 +1,72 @@
+/* =========================================================
+   IMPORT TAILWIND
+   La directive @import "tailwindcss" active toutes les
+   classes utilitaires de Tailwind 4 dans l'application.
+   ========================================================= */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* =========================================================
+   THÈME PERSONNALISÉ
+   @theme inline permet de définir des variables utilisables
+   comme classes Tailwind (ex: bg-primary-600, text-accent-500).
 
+   On y met :
+   - la palette de couleurs du portfolio
+   - les polices (déjà chargées dans layout.tsx)
+   ========================================================= */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Bleu principal (identité "cloud / tech") --- */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  /* --- Violet accent (touche moderne) --- */
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+
+  /* --- Polices --- */
+  --font-sans: var(--font-inter);          /* texte courant */
+  --font-heading: var(--font-poppins);     /* titres */
+  --font-mono: var(--font-jetbrains-mono); /* code */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =========================================================
+   COMPORTEMENT GLOBAL
+   ========================================================= */
+
+/* Défilement fluide quand on clique sur une ancre (#section) */
+html {
+  scroll-behavior: smooth;
 }
 
+/* Police par défaut du corps = Inter */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* Tous les titres utilisent Poppins */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+
+/* Balises de code en JetBrains Mono */
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-jetbrains-mono), monospace;
 }
