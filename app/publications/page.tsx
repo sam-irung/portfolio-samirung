@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getPublications } from "@/app/lib/services/publications";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Publications & recherche",
+  description:
+    "Articles scientifiques, mémoires et contributions techniques autour du Cloud, de la sécurité et des réseaux.",
+};
+//export const dynamic = "force-dynamic";
 
 const typeStyles: Record<string, string> = {
   Article: "bg-primary-100 text-primary-700",

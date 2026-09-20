@@ -10,7 +10,7 @@ import PublicationsPreview from "@/components/home/PublicationsPreview";
 import LabsPreview from "@/components/home/LabsPreview";
 import ContactCTA from "@/components/home/ContactCTA";
 
-export const dynamic = "force-dynamic";
+//export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (

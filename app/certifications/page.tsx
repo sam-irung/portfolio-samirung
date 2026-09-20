@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getCertifications } from "@/app/lib/services/certifications";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Certifications",
+  description:
+    "Certifications obtenues en Cloud, DevOps, systèmes et réseaux pour valider mes compétences techniques.",
+};
+//export const dynamic = "force-dynamic";
 
 const gradients = [
   "from-orange-500 to-orange-700",

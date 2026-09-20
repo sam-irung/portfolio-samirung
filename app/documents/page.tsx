@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getDocuments } from "@/app/lib/services/documents";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Documents",
+  description:
+    "CV, mémoires, rapports et documents professionnels en téléchargement.",
+};
+//export const dynamic = "force-dynamic";
 
 export default async function DocumentsPage() {
   const documents = await getDocuments();

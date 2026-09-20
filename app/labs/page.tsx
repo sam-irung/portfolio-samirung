@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getLabs } from "@/app/lib/services/labs";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Labs",
+  description:
+    "Laboratoires techniques : Terraform, Kubernetes, AWS, GNS3, Active Directory et DevSecOps. Environnements d'expérimentation documentés.",
+};
+//export const dynamic = "force-dynamic";
 
 const gradients = [
   "from-violet-500 to-violet-700",

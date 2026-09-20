@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getSkillCategories } from "@/app/lib/services/skills";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Compétences",
+  description:
+    "Mes compétences techniques en Cloud, DevOps, IaC, réseaux, systèmes et sécurité. Niveaux réels et technologies maîtrisées.",
+};
+//export const dynamic = "force-dynamic";
 
 const levelStyles: Record<string, string> = {
   Fondamental: "bg-neutral-100 text-neutral-700",

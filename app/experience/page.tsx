@@ -3,8 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getExperiences } from "@/app/lib/services/experiences";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Expérience",
+  description:
+    "Parcours professionnel et formation : stages, projets techniques et progression continue vers le Cloud et la cybersécurité.",
+};
+//export const dynamic = "force-dynamic";
 
 function formatPeriod(startDate: Date, endDate: Date | null, current: boolean) {
   const start = new Date(startDate);

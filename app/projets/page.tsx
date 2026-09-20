@@ -3,8 +3,15 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getPublishedProjects } from "@/app/lib/services/projects";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Projets",
+  description:
+    "Découvrez mes projets en Cloud, DevOps, Infrastructure as Code et sécurité : études de cas complètes avec architecture, technologies et résultats.",
+};
+
+//export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
   const projects = await getPublishedProjects();

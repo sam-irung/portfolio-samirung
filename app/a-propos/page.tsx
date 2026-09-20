@@ -5,8 +5,14 @@ import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
 import { getExperiences } from "@/app/lib/services/experiences";
 import { prisma } from "@/app/lib/prisma";
+import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "À propos",
+  description:
+    "Cloud Engineer orienté DevOps et Infrastructure as Code, en route vers la cybersécurité. Parcours, formation et vision professionnelle.",
+};
+//export const dynamic = "force-dynamic";
 
 const values = [
   {

@@ -3,8 +3,22 @@ import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getLabBySlug, getLabs } from "@/app/lib/services/labs";
+import type { Metadata } from "next";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const lab = await getLabBySlug(slug);
+  if (!lab) return {};
 
-export const dynamic = "force-dynamic";
+  return {
+    title: lab.title,
+    description: lab.summary,
+  };
+}
+//export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const labs = await getLabs();

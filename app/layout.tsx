@@ -43,10 +43,12 @@ const jetbrainsMono = JetBrains_Mono({
 // ------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  // Titre affiché dans l'onglet du navigateur
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://samirung.vercel.app"
+  ),
   title: {
     default: "Sam Irung — Cloud Engineer • DevOps • Infrastructure as Code",
-    template: "%s | Sam Irung", // ex: "Projets | Sam Irung"
+    template: "%s | Sam Irung",
   },
   description:
     "Portfolio professionnel de Sam Irung — Cloud Engineer, DevOps et Infrastructure as Code. Projets, expériences, certifications et travaux techniques.",
@@ -61,12 +63,10 @@ export const metadata: Metadata = {
     "AWS",
     "Cybersécurité",
     "DevSecOps",
+    "Portfolio",
   ],
-  authors: [{ name: "Sam Irung" }],
+  authors: [{ name: "Sam Irung", url: "https://github.com/sam-irung" }],
   creator: "Sam Irung",
-  // ⚠️ metadataBase sera ajouté quand le domaine réel sera choisi
-  // metadataBase: new URL("https://ton-domaine.com"),
-
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -74,6 +74,22 @@ export const metadata: Metadata = {
     title: "Sam Irung — Cloud Engineer • DevOps • Infrastructure as Code",
     description:
       "Portfolio professionnel de Sam Irung — Cloud Engineer, DevOps et Infrastructure as Code.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sam Irung — Cloud Engineer • DevOps • Infrastructure as Code",
+    description:
+      "Portfolio professionnel de Sam Irung — Cloud Engineer, DevOps et Infrastructure as Code.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -98,6 +114,31 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-white text-neutral-900 font-sans">
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Sam Irung",
+              url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://samirung.vercel.app",
+              jobTitle: "Cloud Engineer",
+              knowsAbout: [
+                "Cloud Computing",
+                "DevOps",
+                "Infrastructure as Code",
+                "Terraform",
+                "Kubernetes",
+                "AWS",
+                "Cybersecurity",
+              ],
+              sameAs: [
+                "https://github.com/sam-irung",
+                "https://linkedin.com/in/samirung-4a113334",
+              ],
+            }),
+          }}
+        />
       </body>
     </html>
   );

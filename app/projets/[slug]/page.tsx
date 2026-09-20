@@ -3,8 +3,22 @@ import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getProjectBySlug, getPublishedProjects } from "@/app/lib/services/projects";
+import type { Metadata } from "next";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+  if (!project) return {};
 
-export const dynamic = "force-dynamic";
+  return {
+    title: project.title,
+    description: project.shortSummary,
+  };
+}
+//export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const projects = await getPublishedProjects();
