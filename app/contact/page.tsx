@@ -48,6 +48,7 @@ export default function ContactPage() {
     setError(null);
     setState("sending");
 
+    // Validation client basique (l'API revérifie de toute façon)
     if (!form.name || !form.email || !form.subject || !form.message) {
       setError("Merci de remplir tous les champs.");
       setState("error");
@@ -60,10 +61,27 @@ export default function ContactPage() {
       return;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    setState("success");
-    setForm({ name: "", email: "", subject: "", message: "" });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Erreur lors de l'envoi. Réessayez.");
+        setState("error");
+        return;
+      }
+
+      setState("success");
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setError("Erreur réseau. Vérifiez votre connexion.");
+      setState("error");
+    }
   };
 
   return (
@@ -115,6 +133,7 @@ export default function ContactPage() {
                       value={form.name}
                       onChange={handleChange}
                       required
+                      minLength={2}
                       className="mt-2 w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                       placeholder="Votre nom"
                     />
@@ -148,6 +167,7 @@ export default function ContactPage() {
                     value={form.subject}
                     onChange={handleChange}
                     required
+                    minLength={2}
                     className="mt-2 w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                     placeholder="Objet de votre message"
                   />
@@ -163,6 +183,7 @@ export default function ContactPage() {
                     value={form.message}
                     onChange={handleChange}
                     required
+                    minLength={10}
                     rows={7}
                     className="mt-2 w-full resize-y rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
                     placeholder="Décrivez votre projet, question ou message..."
