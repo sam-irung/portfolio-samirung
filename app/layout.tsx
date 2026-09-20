@@ -87,6 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr" // langue principale : français
+      data-scroll-behavior="smooth"
       className={`
         ${poppins.variable}
         ${inter.variable}
