@@ -19,6 +19,7 @@ export async function generateMetadata({
   };
 }
 //export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const labs = await getLabs();
