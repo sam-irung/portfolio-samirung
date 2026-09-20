@@ -1,0 +1,310 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ProjectStatus {
+  DEVELOPMENT
+  COMPLETED
+  ARCHIVED
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+// ============================================================
+// ADMIN
+// ============================================================
+
+model AdminProfile {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  fullName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// PROJETS
+// ============================================================
+
+model Project {
+  id               String        @id @default(cuid())
+  title            String
+  slug             String        @unique
+  shortSummary     String
+  description      String?
+  context          String?
+  objectives       String?
+  architecture     String?
+  methodology      String?
+  implementation   String?
+  results          String?
+  difficulties     String?
+  solutions        String?
+  imageUrl         String?
+  githubUrl        String?
+  demoUrl          String?
+  documentationUrl String?
+  status           ProjectStatus @default(DEVELOPMENT)
+  featured         Boolean       @default(false)
+  published        Boolean       @default(false)
+  order            Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  technologies ProjectTechnology[]
+
+  @@index([published])
+  @@index([featured])
+  @@index([order])
+}
+
+model Technology {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects ProjectTechnology[]
+}
+
+model ProjectTechnology {
+  projectId    String
+  technologyId String
+
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, technologyId])
+}
+
+// ============================================================
+// COMPÉTENCES
+// ============================================================
+
+model SkillCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  skills Skill[]
+}
+
+model Skill {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  level       String?
+  icon        String?
+  order       Int           @default(0)
+  published   Boolean       @default(true)
+  categoryId  String
+
+  category SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([order])
+}
+
+// ============================================================
+// EXPÉRIENCES
+// ============================================================
+
+model Experience {
+  id           String    @id @default(cuid())
+  company      String
+  position     String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String?
+  missions     String?
+  technologies String?
+  order        Int       @default(0)
+  published    Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([startDate])
+  @@index([order])
+}
+
+// ============================================================
+// CERTIFICATIONS
+// ============================================================
+
+model Certification {
+  id              String   @id @default(cuid())
+  title           String
+  issuer          String
+  year            Int?
+  description     String?
+  certificateUrl  String?
+  verificationUrl String?
+  imageUrl        String?
+  order           Int      @default(0)
+  published       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([year])
+  @@index([order])
+}
+
+// ============================================================
+// PUBLICATIONS
+// ============================================================
+
+model Publication {
+  id          String            @id @default(cuid())
+  title       String
+  slug        String            @unique
+  authors     String?
+  abstract    String?
+  type        String?
+  journal     String?
+  conference  String?
+  year        Int?
+  doi         String?
+  externalUrl String?
+  pdfUrl      String?
+  status      PublicationStatus @default(DRAFT)
+  featured    Boolean           @default(false)
+  order       Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([status])
+  @@index([year])
+  @@index([featured])
+}
+
+// ============================================================
+// LABS
+// ============================================================
+
+model Lab {
+  id               String            @id @default(cuid())
+  title            String
+  slug             String            @unique
+  summary          String
+  objective        String?
+  environment      String?
+  architecture     String?
+  manipulations    String?
+  result           String?
+  learning         String?
+  codeUrl          String?
+  documentationUrl String?
+  imageUrl         String?
+  status           PublicationStatus @default(DRAFT)
+  featured         Boolean           @default(false)
+  order            Int               @default(0)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([status])
+  @@index([featured])
+  @@index([order])
+}
+
+// ============================================================
+// BLOG
+// ============================================================
+
+model BlogPost {
+  id          String            @id @default(cuid())
+  title       String
+  slug        String            @unique
+  excerpt     String?
+  content     String
+  coverImage  String?
+  category    String?
+  tags        String?
+  status      PublicationStatus @default(DRAFT)
+  featured    Boolean           @default(false)
+  publishedAt DateTime?
+  order       Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([status])
+  @@index([publishedAt])
+  @@index([featured])
+}
+
+// ============================================================
+// DOCUMENTS
+// ============================================================
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String?
+  fileUrl     String
+  fileType    String?
+  fileSize    Int?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([order])
+}
+
+// ============================================================
+// MESSAGES
+// ============================================================
+
+model Message {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  content   String
+  status    MessageStatus @default(UNREAD)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================================
+// PARAMÈTRES
+// ============================================================
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

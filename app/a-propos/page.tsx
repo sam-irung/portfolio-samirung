@@ -3,44 +3,10 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
+import { getExperiences } from "@/app/lib/services/experiences";
+import { prisma } from "@/app/lib/prisma";
 
-const timeline = [
-  {
-    year: "2026",
-    title: "Master en Cybersécurité",
-    org: "Formation universitaire",
-    description:
-      "Spécialisation en sécurité des infrastructures, DevSecOps et protection des systèmes cloud.",
-  },
-  {
-    year: "2025",
-    title: "Projets Cloud & DevOps",
-    org: "Indépendant",
-    description:
-      "Conception et déploiement d'infrastructures AWS automatisées avec Terraform.",
-  },
-  {
-    year: "2024",
-    title: "Stage — Gécamines",
-    org: "Gécamines",
-    description:
-      "Administration systèmes et réseaux, Active Directory, support technique.",
-  },
-  {
-    year: "2023",
-    title: "Stage — Kamoa",
-    org: "Kamoa Copper",
-    description:
-      "Découverte des environnements IT industriels et participation à la maintenance réseau.",
-  },
-  {
-    year: "2022",
-    title: "Licence en Informatique",
-    org: "Formation universitaire",
-    description:
-      "Fondamentaux en réseaux, systèmes, programmation et bases de données.",
-  },
-];
+export const dynamic = "force-dynamic";
 
 const values = [
   {
@@ -74,13 +40,34 @@ const interests = [
   "Automatisation",
 ];
 
-export default function AboutPage() {
+function formatPeriod(startDate: Date, endDate: Date | null, current: boolean) {
+  const start = new Date(startDate);
+  const startLabel = `${start.getFullYear()}`;
+
+  if (current || !endDate) {
+    return `${startLabel} — Aujourd'hui`;
+  }
+
+  const end = new Date(endDate);
+  const endLabel = `${end.getFullYear()}`;
+
+  return startLabel === endLabel ? startLabel : `${startLabel} — ${endLabel}`;
+}
+
+export default async function AboutPage() {
+  const experiences = await getExperiences();
+
+  const emailSetting = await prisma.setting.findUnique({
+    where: { key: "contact.email" },
+  });
+
+  const email = emailSetting?.value ?? "samirung65@gmail.com";
+
   return (
     <>
       <Header />
 
       <main className="flex-1 bg-white">
-        {/* En-tête */}
         <section className="border-b border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
             <Reveal>
@@ -102,15 +89,13 @@ export default function AboutPage() {
 
                 <p className="mt-5 text-base leading-relaxed text-neutral-600 md:text-lg">
                   Cloud Engineer orienté DevOps et Infrastructure as Code, en
-                  route vers une spécialisation en cybersécurité. Je conçois,
-                  automatise et sécurise des infrastructures modernes.
+                  route vers une spécialisation en cybersécurité.
                 </p>
               </div>
             </Reveal>
           </div>
         </section>
 
-        {/* Présentation + photo */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="grid gap-12 md:grid-cols-[auto_1fr] md:items-start md:gap-16">
             <Reveal>
@@ -143,17 +128,13 @@ export default function AboutPage() {
                 <p>
                   Je suis <strong className="text-neutral-900">Sam Irung</strong>,
                   Cloud Engineer avec une formation solide en administration
-                  systèmes et réseaux. Mon travail consiste à concevoir,
-                  automatiser et sécuriser des infrastructures modernes, en
-                  m'appuyant sur le Cloud, le DevOps et l'Infrastructure as Code.
+                  systèmes et réseaux.
                 </p>
 
                 <p>
-                  J'ai commencé par les fondamentaux : systèmes Linux et
-                  Windows, réseaux, administration serveur. Puis je me suis
-                  naturellement orienté vers le Cloud et l'automatisation, car
-                  c'est là que les vraies problématiques d'échelle, de fiabilité
-                  et de sécurité apparaissent.
+                  Je conçois, automatise et sécurise des infrastructures
+                  modernes, en m'appuyant sur le Cloud, le DevOps et
+                  l'Infrastructure as Code.
                 </p>
 
                 <p>
@@ -162,9 +143,7 @@ export default function AboutPage() {
                   <strong className="text-neutral-900">Terraform</strong>,{" "}
                   <strong className="text-neutral-900">Docker</strong> et{" "}
                   <strong className="text-neutral-900">Kubernetes</strong>. Je
-                  documente chaque projet comme une étude de cas, car je crois
-                  qu'une infrastructure bien conçue doit aussi être bien
-                  expliquée.
+                  documente chaque projet comme une étude de cas.
                 </p>
 
                 <p>
@@ -173,16 +152,26 @@ export default function AboutPage() {
                     Master en cybersécurité
                   </strong>{" "}
                   afin d'intégrer la sécurité dès la conception des
-                  infrastructures, et non comme une étape finale. Mon objectif :
-                  construire des environnements fiables, reproductibles et
-                  durables.
+                  infrastructures. Mon objectif : construire des environnements
+                  fiables, reproductibles et durables.
                 </p>
+
+                <div className="pt-2">
+                  <a
+                    href="/documents/CV-Sam-Irung.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-11 items-center gap-2 rounded-full bg-primary-600 px-6 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+                  >
+                    Télécharger mon CV
+                  </a>
+                </div>
               </div>
             </Reveal>
           </div>
         </section>
 
-        {/* Timeline complète */}
+        {/* Timeline */}
         <section className="border-t border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
             <Reveal>
@@ -193,10 +182,6 @@ export default function AboutPage() {
                 <h2 className="mt-4 font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
                   Mon parcours
                 </h2>
-                <p className="mt-4 text-base text-neutral-600">
-                  De la formation aux projets techniques, une progression
-                  continue vers le Cloud, le DevOps et la cybersécurité.
-                </p>
               </div>
             </Reveal>
 
@@ -204,30 +189,32 @@ export default function AboutPage() {
               <span className="absolute left-4 top-0 h-full w-px bg-neutral-200 md:left-6" />
 
               <div className="space-y-8">
-                {timeline.map((item, i) => (
-                  <Reveal key={item.title} delay={i * 0.06}>
+                {experiences.map((item, i) => (
+                  <Reveal key={item.id} delay={i * 0.06}>
                     <div className="relative flex gap-6 md:gap-8">
                       <span className="relative z-10 mt-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-4 border-neutral-50 bg-primary-600 text-xs font-bold text-white md:h-12 md:w-12">
-                        {item.year.slice(-2)}
+                        {new Date(item.startDate).getFullYear().toString().slice(-2)}
                       </span>
 
                       <div className="flex-1 rounded-2xl border border-neutral-200 bg-white p-6">
                         <div className="flex flex-wrap items-center gap-3">
                           <span className="rounded-full bg-primary-50 px-2.5 py-0.5 font-mono text-xs font-semibold text-primary-700">
-                            {item.year}
+                            {formatPeriod(item.startDate, item.endDate, item.current)}
                           </span>
                           <span className="text-xs font-medium text-neutral-500">
-                            {item.org}
+                            {item.company}
                           </span>
                         </div>
 
                         <h3 className="mt-3 font-heading text-lg font-semibold text-neutral-900">
-                          {item.title}
+                          {item.position}
                         </h3>
 
-                        <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                          {item.description}
-                        </p>
+                        {item.description && (
+                          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </Reveal>
@@ -283,12 +270,12 @@ export default function AboutPage() {
               </p>
 
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link
-                  href="/contact"
+                <a
+                  href={`mailto:${email}`}
                   className="inline-flex h-11 items-center justify-center rounded-full bg-primary-600 px-6 text-sm font-medium text-white transition-colors hover:bg-primary-700"
                 >
                   Me contacter
-                </Link>
+                </a>
                 <Link
                   href="/projets"
                   className="inline-flex h-11 items-center justify-center rounded-full border border-neutral-300 bg-white px-6 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100"

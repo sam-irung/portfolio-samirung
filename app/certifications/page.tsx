@@ -2,85 +2,27 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
+import { getCertifications } from "@/app/lib/services/certifications";
 
-type Certification = {
-  name: string;
-  issuer: string;
-  date: string;
-  credentialId?: string;
-  description: string;
-  skills: string[];
-  verifyUrl?: string;
-  color: string;
-  icon: string;
-};
+export const dynamic = "force-dynamic";
 
-const certifications: Certification[] = [
-  {
-    name: "AWS Cloud Practitioner",
-    issuer: "Amazon Web Services",
-    date: "2025",
-    credentialId: "AWS-CP-XXXXX",
-    description:
-      "Fondamentaux du cloud AWS : services principaux, modèle de facturation, sécurité et architecture.",
-    skills: ["AWS", "Cloud", "IAM", "S3", "EC2"],
-    verifyUrl: "#",
-    color: "from-orange-500 to-orange-700",
-    icon: "☁",
-  },
-  {
-    name: "Terraform Associate",
-    issuer: "HashiCorp",
-    date: "2025",
-    description:
-      "Maîtrise de Terraform : écriture de configurations, gestion du state, modules et providers.",
-    skills: ["Terraform", "IaC", "State", "Modules"],
-    verifyUrl: "#",
-    color: "from-violet-500 to-violet-700",
-    icon: "</>",
-  },
-  {
-    name: "Docker Fundamentals",
-    issuer: "Docker",
-    date: "2024",
-    description:
-      "Conteneurisation d'applications, gestion d'images, réseaux et volumes Docker.",
-    skills: ["Docker", "Containers", "Compose"],
-    verifyUrl: "#",
-    color: "from-sky-500 to-sky-700",
-    icon: "🐳",
-  },
-  {
-    name: "Linux Essentials",
-    issuer: "Linux Professional Institute",
-    date: "2024",
-    description:
-      "Bases solides du système Linux : ligne de commande, système de fichiers, permissions et scripting.",
-    skills: ["Linux", "Bash", "Systèmes"],
-    verifyUrl: "#",
-    color: "from-neutral-700 to-neutral-900",
-    icon: "🐧",
-  },
-  {
-    name: "Cisco Networking Basics",
-    issuer: "Cisco",
-    date: "2023",
-    description:
-      "Fondamentaux des réseaux : modèles OSI/TCP-IP, adressage, commutation et routage.",
-    skills: ["Réseaux", "TCP/IP", "Cisco"],
-    verifyUrl: "#",
-    color: "from-blue-500 to-blue-700",
-    icon: "◈",
-  },
+const gradients = [
+  "from-orange-500 to-orange-700",
+  "from-violet-500 to-violet-700",
+  "from-sky-500 to-sky-700",
+  "from-neutral-700 to-neutral-900",
+  "from-blue-500 to-blue-700",
+  "from-emerald-500 to-emerald-700",
 ];
 
-export default function CertificationsPage() {
+export default async function CertificationsPage() {
+  const certifications = await getCertifications();
+
   return (
     <>
       <Header />
 
       <main className="flex-1 bg-white">
-        {/* En-tête */}
         <section className="border-b border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
             <Reveal>
@@ -109,61 +51,47 @@ export default function CertificationsPage() {
           </div>
         </section>
 
-        {/* Grille certifications */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {certifications.map((cert, i) => (
-              <Reveal key={cert.name} delay={i * 0.06}>
+              <Reveal key={cert.id} delay={i * 0.06}>
                 <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-all hover:-translate-y-1 hover:border-primary-300 hover:shadow-xl">
-                  {/* Bandeau */}
                   <div
-                    className={`relative aspect-[16/9] bg-gradient-to-br ${cert.color}`}
+                    className={`relative aspect-[16/9] bg-gradient-to-br ${
+                      gradients[i % gradients.length]
+                    }`}
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]" />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="font-mono text-5xl text-white/95">
-                        {cert.icon}
+                        🏆
                       </span>
                     </div>
-                    <span className="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1 font-mono text-xs font-medium text-white backdrop-blur-sm">
-                      {cert.date}
-                    </span>
+                    {cert.year && (
+                      <span className="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1 font-mono text-xs font-medium text-white backdrop-blur-sm">
+                        {cert.year}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Contenu */}
                   <div className="flex flex-1 flex-col p-6">
                     <p className="text-xs font-medium uppercase tracking-wider text-primary-600">
                       {cert.issuer}
                     </p>
 
                     <h2 className="mt-2 font-heading text-lg font-semibold text-neutral-900">
-                      {cert.name}
+                      {cert.title}
                     </h2>
 
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-neutral-600">
-                      {cert.description}
-                    </p>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {cert.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-md bg-neutral-100 px-2 py-1 font-mono text-xs text-neutral-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-
-                    {cert.credentialId && (
-                      <p className="mt-4 font-mono text-xs text-neutral-500">
-                        ID : {cert.credentialId}
+                    {cert.description && (
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-neutral-600">
+                        {cert.description}
                       </p>
                     )}
 
-                    {cert.verifyUrl && (
+                    {cert.verificationUrl && (
                       <a
-                        href={cert.verifyUrl}
+                        href={cert.verificationUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors group-hover:text-primary-700"
@@ -179,7 +107,6 @@ export default function CertificationsPage() {
           </div>
         </section>
 
-        {/* CTA */}
         <section className="border-t border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 text-center md:py-20">
             <Reveal>

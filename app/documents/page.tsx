@@ -2,36 +2,18 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
+import { getDocuments } from "@/app/lib/services/documents";
 
-type Document = {
-  title: string;
-  category: string;
-  description: string;
-  version: string;
-  fileUrl: string;
-  fileType: "PDF" | "DOCX";
-  size?: string;
-};
+export const dynamic = "force-dynamic";
 
-const documents: Document[] = [
-  {
-    title: "CV — Sam Irung",
-    category: "Curriculum Vitae",
-    description:
-      "Cloud Engineer • DevOps • Infrastructure as Code — version professionnelle complète.",
-    version: "2026",
-    fileUrl: "/documents/CV-Sam-Irung.pdf",
-    fileType: "PDF",
-  },
-];
+export default async function DocumentsPage() {
+  const documents = await getDocuments();
 
-export default function DocumentsPage() {
   return (
     <>
       <Header />
 
       <main className="flex-1 bg-white">
-        {/* En-tête */}
         <section className="border-b border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
             <Reveal>
@@ -60,37 +42,34 @@ export default function DocumentsPage() {
           </div>
         </section>
 
-        {/* Liste des documents */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="space-y-4">
             {documents.map((doc, i) => (
-              <Reveal key={doc.title} delay={i * 0.06}>
+              <Reveal key={doc.id} delay={i * 0.06}>
                 <article className="rounded-2xl border border-neutral-200 bg-white p-6 transition-all hover:border-primary-300 hover:shadow-lg md:p-8">
                   <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                    {/* Infos */}
                     <div className="flex items-start gap-5">
                       <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50 font-mono text-xs font-bold text-primary-700">
-                        {doc.fileType}
+                        {doc.fileType ?? "PDF"}
                       </span>
 
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-primary-600">
-                          {doc.category}
-                        </p>
+                        {doc.category && (
+                          <p className="text-xs font-medium uppercase tracking-wider text-primary-600">
+                            {doc.category}
+                          </p>
+                        )}
                         <h2 className="mt-1 font-heading text-lg font-semibold text-neutral-900 md:text-xl">
                           {doc.title}
                         </h2>
-                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-600">
-                          {doc.description}
-                        </p>
-                        <p className="mt-2 font-mono text-xs text-neutral-500">
-                          Version {doc.version}
-                          {doc.size && ` · ${doc.size}`}
-                        </p>
+                        {doc.description && (
+                          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-600">
+                            {doc.description}
+                          </p>
+                        )}
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex flex-wrap gap-3 md:flex-shrink-0">
                       <a
                         href={doc.fileUrl}
@@ -114,7 +93,6 @@ export default function DocumentsPage() {
             ))}
           </div>
 
-          {/* Note */}
           <Reveal delay={0.15}>
             <p className="mt-12 text-center text-sm text-neutral-500">
               D'autres documents seront ajoutés progressivement : mémoires,
@@ -123,7 +101,6 @@ export default function DocumentsPage() {
           </Reveal>
         </section>
 
-        {/* CTA */}
         <section className="border-t border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 text-center md:py-20">
             <Reveal>

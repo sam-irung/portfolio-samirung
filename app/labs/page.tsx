@@ -2,100 +2,29 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Reveal from "@/components/ui/Reveal";
+import { getLabs } from "@/app/lib/services/labs";
 
-type Lab = {
-  slug: string;
-  title: string;
-  category: string;
-  description: string;
-  tags: string[];
-  color: string;
-  icon: string;
-  level: "Débutant" | "Intermédiaire" | "Avancé";
-};
+export const dynamic = "force-dynamic";
 
-const labs: Lab[] = [
-  {
-    slug: "terraform-lab",
-    title: "Terraform Lab",
-    category: "Infrastructure as Code",
-    description:
-      "Modules Terraform réutilisables pour AWS : VPC, EC2, IAM, S3 avec state distant sur S3 + DynamoDB.",
-    tags: ["Terraform", "AWS", "S3", "DynamoDB"],
-    color: "from-violet-500 to-violet-700",
-    icon: "</>",
-    level: "Intermédiaire",
-  },
-  {
-    slug: "kubernetes-lab",
-    title: "Kubernetes Lab",
-    category: "DevOps",
-    description:
-      "Cluster Kubernetes local (k3s) avec déploiement d'applications, Ingress, ConfigMaps, Secrets et Helm.",
-    tags: ["Kubernetes", "k3s", "Helm", "Ingress"],
-    color: "from-blue-500 to-blue-700",
-    icon: "☸",
-    level: "Intermédiaire",
-  },
-  {
-    slug: "aws-lab",
-    title: "AWS Lab",
-    category: "Cloud",
-    description:
-      "Architecture 3-tiers sur AWS : VPC multi-AZ, Application Load Balancer, Auto Scaling Group, RDS et monitoring CloudWatch.",
-    tags: ["AWS", "VPC", "ALB", "EC2", "RDS"],
-    color: "from-orange-500 to-orange-700",
-    icon: "☁",
-    level: "Intermédiaire",
-  },
-  {
-    slug: "gns3-lab",
-    title: "GNS3 Lab",
-    category: "Réseaux",
-    description:
-      "Simulation d'architectures réseau d'entreprise : VLAN, routage inter-VLAN, OSPF multi-aires et VPN site-à-site.",
-    tags: ["GNS3", "VLAN", "OSPF", "VPN"],
-    color: "from-cyan-500 to-cyan-700",
-    icon: "◈",
-    level: "Intermédiaire",
-  },
-  {
-    slug: "active-directory-lab",
-    title: "Active Directory Lab",
-    category: "Systèmes",
-    description:
-      "Déploiement d'un domaine Active Directory complet : contrôleur de domaine, DNS, DHCP, GPO et serveur de fichiers.",
-    tags: ["Windows Server", "AD DS", "GPO", "DNS", "DHCP"],
-    color: "from-sky-500 to-sky-700",
-    icon: "⚙",
-    level: "Intermédiaire",
-  },
-  {
-    slug: "devsecops-lab",
-    title: "DevSecOps Lab",
-    category: "Sécurité",
-    description:
-      "Pipeline CI/CD sécurisé : scanning IaC (tfsec, checkov), SAST, gestion des secrets et principe du moindre privilège.",
-    tags: ["DevSecOps", "CI/CD", "tfsec", "Sécurité"],
-    color: "from-rose-500 to-rose-700",
-    icon: "🛡",
-    level: "Avancé",
-  },
+const gradients = [
+  "from-violet-500 to-violet-700",
+  "from-blue-500 to-blue-700",
+  "from-orange-500 to-orange-700",
+  "from-cyan-500 to-cyan-700",
+  "from-sky-500 to-sky-700",
+  "from-rose-500 to-rose-700",
 ];
 
-const levelStyles: Record<Lab["level"], string> = {
-  Débutant: "bg-neutral-100 text-neutral-700",
-  Intermédiaire: "bg-primary-100 text-primary-700",
-  Avancé: "bg-accent-100 text-accent-700",
-};
+const icons = ["</>", "☸", "☁", "◈", "⚙", "🛡"];
 
-export default function LabsPage() {
+export default async function LabsPage() {
+  const labs = await getLabs();
+
   return (
     <>
       <Header />
 
       <main className="flex-1 bg-white">
-        {/* En-tête */}
         <section className="border-b border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
             <Reveal>
@@ -117,65 +46,40 @@ export default function LabsPage() {
 
                 <p className="mt-5 text-base leading-relaxed text-neutral-600 md:text-lg">
                   Des environnements d'expérimentation conçus pour tester,
-                  comprendre et reconstruire. Chaque lab est documenté comme
-                  une petite étude de cas : objectif, architecture, manipulations
-                  et apprentissages.
+                  comprendre et reconstruire.
                 </p>
               </div>
             </Reveal>
           </div>
         </section>
 
-        {/* Grille labs */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {labs.map((lab, i) => (
-              <Reveal key={lab.slug} delay={i * 0.06}>
+              <Reveal key={lab.id} delay={i * 0.06}>
                 <Link
                   href={`/labs/${lab.slug}`}
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-all hover:-translate-y-1 hover:border-primary-300 hover:shadow-xl"
                 >
-                  {/* Bandeau */}
                   <div
-                    className={`relative flex aspect-[16/9] items-center justify-center bg-gradient-to-br ${lab.color}`}
+                    className={`relative flex aspect-[16/9] items-center justify-center bg-gradient-to-br ${
+                      gradients[i % gradients.length]
+                    }`}
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]" />
-
                     <span className="relative font-mono text-4xl text-white/95">
-                      {lab.icon}
-                    </span>
-
-                    <span className="absolute left-4 top-4 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                      {lab.category}
-                    </span>
-
-                    <span
-                      className={`absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-medium ${levelStyles[lab.level]}`}
-                    >
-                      {lab.level}
+                      {icons[i % icons.length]}
                     </span>
                   </div>
 
-                  {/* Contenu */}
                   <div className="flex flex-1 flex-col p-6">
                     <h2 className="font-heading text-lg font-semibold text-neutral-900">
                       {lab.title}
                     </h2>
 
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-neutral-600">
-                      {lab.description}
+                      {lab.summary}
                     </p>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {lab.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-md bg-neutral-100 px-2 py-1 font-mono text-xs text-neutral-700"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
 
                     <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors group-hover:text-primary-700">
                       Explorer le lab
@@ -188,7 +92,6 @@ export default function LabsPage() {
           </div>
         </section>
 
-        {/* CTA */}
         <section className="border-t border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-6xl px-6 py-16 text-center md:py-20">
             <Reveal>
@@ -196,8 +99,7 @@ export default function LabsPage() {
                 Vous voulez voir ces labs en action ?
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base text-neutral-600">
-                Tous les labs sont documentés sur GitHub. N'hésitez pas à me
-                contacter pour en discuter.
+                Tous les labs sont documentés sur GitHub.
               </p>
 
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
